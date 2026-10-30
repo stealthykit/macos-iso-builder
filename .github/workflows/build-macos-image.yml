@@ -31,9 +31,14 @@ jobs:
       - name: Upload artifact
         uses: actions/upload-artifact@v7
         with:
-          path: |
-            ${{ steps.create_image.outputs.image_name }}
-            ${{ steps.create_image.outputs.image_name }}.sha256
+          path: ${{ steps.create_image.outputs.image_name }}
           compression-level: 0
           retention-days: 3
           archive: false
+
+      - name: SHA-256 in the summary
+        run: |
+          echo '### SHA-256' >> "$GITHUB_STEP_SUMMARY"
+          echo '```' >> "$GITHUB_STEP_SUMMARY"
+          cat "${{ steps.create_image.outputs.image_name }}.sha256" >> "$GITHUB_STEP_SUMMARY"
+          echo '```' >> "$GITHUB_STEP_SUMMARY"
